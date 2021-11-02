@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+<script type="text/javascript" src="concrete.min.js"></script>
+<script type="text/javascript" src="model.js"></script>
+<script type="text/javascript" src="view.js"></script>
+<script type="text/javascript" src="controller.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+		<meta charset="utf-8" />
+		<title>DAKON PINTAR</title>
+		<style>
+			* { padding: 0; margin: 0; }
+			canvas { background: #ffffff; display: block; margin-left: 100px; margin-right: 800px }
+		</style>
+		<link rel="stylesheet" type="text/css" href="index.css">
+</head>
+<body style="background: url('img/bingkai.png'); background-size: 100%"><br><br>
+  <h1 style="color: orange" align="center">Universitas PGRI Kanjuruhan Malang</h1>
+      <h2 style="color: black; padding-top: 40px;" align="center">Nur Aisyah Maylany </h2>
+	<div id="container-GUI" >
+    <p>DAKON PINTAR</p>
+      <button id="playerVSplayer" onclick="handleStart(this)">Play</button>
+      <form>
+        <button id="id_materi" type="submit" formaction="materi.html">Materi</button>
+        <button id="id_evaluasi" type="submit" formaction="evaluasi.html">Latihan Soal</button>
+        <button id="id_petunjuk" type="button" data-toggle="modal" data-target="#myPetunjuk" >Petunjuk</button>
+      </form>
+      
+      <!-- <button id="playerVSbotrandom" onclick="handleStart(this)">Player vs Random Bot</button> -->
+      <!-- <button id="playerVSbotai"  onclick="handleStart(this)">Player vs Minimax Bot</button>
+      <button id="botrandomVSbotai"  onclick="handleStart(this)">Random Bot vs Minimax Bot</button> -->
+    
+      <p style="text-decoration: underline;"><br>Difficulty</p>
+    <form class="ai-difficulty">
+      <input type="radio" name="difficulty" value="easy-peasy" checked="checked"> Easy Peasy
+      <input type="radio" name="difficulty" value="easy"> Easy
+      <input type="radio" name="difficulty" value="medium"> Medium
+      <input type="radio" name="difficulty" value="hard"> Hard
+
+      <!-- <audio  id="audio1" controls loop="loop" muted>
+       <source src="img/sound.wav" type="audio/wav" />
+      </audio> -->
+
+      <audio id="audio1" src="img/sound.wav" muted></audio>
+    </form>
+  </div>
+
+  <div style="display: flex; justify-content: center;">
+    <div id="congkakContainer"></div>
+  </div>
+
+
+<script>
+  // Global var
+  var gameState = {
+    turn: 1,
+    congkakState: {},
+    player: Array(2),
+
+    player1SelectedVillage: -1,
+    player2SelectedVillage: -1,
+
+    isEndGame: false,
+  }
+
+  var congkakContainer = document.getElementById('congkakContainer');
+
+  var viewport = new Concrete.Viewport({
+    container: congkakContainer,
+    width: 1520,
+    height: 480
+  });
+
+  var bgLayer = new Concrete.Layer();
+  var beanLayer = new Concrete.Layer();
+  var textLayer = new Concrete.Layer();
+  var pointerLayer = new Concrete.Layer();
+
+  viewport.add(bgLayer).add(beanLayer).add(textLayer).add(pointerLayer);
+
+  CongkakBoard.createBoard(viewport, congkakContainer, bgLayer, beanLayer, textLayer, pointerLayer);
+  CongkakBoard.initCongkakBoard();
+  gameState.congkakState = CongkakBoard.state;
+
+  viewport.render();
+
+  //materi
+
+</script>
+
+<div id="myPetunjuk" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content2">
+    <span class="close">&times;</span>
+    <center><p>Petunjuk Permainan</p>
+    <br>
+    Cara bermain Dakon Pintar (DaPin)<br><br>
+1.  DaPin dimainkan oleh 1 orang <br>
+2.  Tekan tombol play <br>
+3.  Klik lumbung kecil <br>
+4.  Baca rangkuman materi <br>
+5.  Kerjakan soal di game DaPin<br></center>
+
+  </div>
+</div>
+
+<!-- <button id="myBtn">Open Modal</button> -->
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>Ringkasan Materi</p>
+      <div class="flex">
+      <div class="flex">
+        <div class="field"></div>
+        <div id="question" class="field"></div>
+      </div>
+     
+  </div>
+</div>
+
+
+<script type="text/javascript">
+var modal = document.getElementById("myModal");
+var btn = document.getElementById("myBtn");
+var span = modal.getElementsByClassName("close")[0];
+span.onclick = function() {
+  console.log("???");
+  modal.style.display = "none";
+  $('#myModal').modal('hide');
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    // modal.style.display = "none";
+    btnProvideQuestion();
+    $('#myModal').modal('hide');
+  }
+}
+
+var a = document.getElementById("myPetunjuk");
+var b = document.getElementById("id_petunjuk");
+var c = document.getElementsByClassName("close")[0];
+c.onclick = function() {
+  console.log("whyyy");
+  a.style.display = "none";
+  $('#myPetunjuk').modal('hide');
+}
+$(document).ready(function () {
+  console.log("audio");
+  // var audio = new Audio('img/sound.wav');
+  //       audio.play();
+        // var myAudio = document.createElement("audio");
+        // myAudio.src = "img/sound.wav";
+        // myAudio.play();
+        // myAudio.pause();
+        var myAudio1 = document.getElementById("audio1");
+myAudio1.play()
+    });
+
+
+
+</script>
+<style type="text/css">
+  .modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+.modal-content2 {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 30%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+</style>
+</body>
+</html>
